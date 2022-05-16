@@ -11,6 +11,7 @@
 //
 // raw block processing (NOT an encryption):
 //    chacha20_process_block(block_of_16_uint32);
+//    chacha20_xor_block(source_buffer_16_uint32, block_of_16_uint32); // xor ChaCha20 block with userdata buffer
 //
 
 
@@ -111,6 +112,12 @@ static void chacha20_process_block(uint32_t block[16])
         CHACHA20_QUARTERROUND(block, 3, 4, 9, 14)
     }
 #undef CHACHA20_QUARTERROUND
+}
+
+static void chacha20_xor_block(uint32_t dst_block[16], uint32_t src_block[16])
+{
+    for (int i = 0; i < 16; i++)
+        dst_block[i] ^= src_block[i];
 }
 
 static void chacha20_block_next(struct chacha20_context *ctx)
